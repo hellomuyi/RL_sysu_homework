@@ -8,7 +8,7 @@ Homework with respect to Reinforcement Learning for SYSU graduate students
 3. Sarsa and Q-learning
 
 #### homework2
-1. DQN for PongNoFrameskip-v4
+1. DQN (Nature DQN、Double DQN and Dueling DQN) for PongNoFrameskip-v4
 2. REINFORCE and REINFORCE with baseline for CartPole-v0
 3. DDPG (TD3) for LunarLanderContinuous-v2
 4. DDPG (TD3) for BipedalWalker-v2
@@ -16,4 +16,4 @@ Homework with respect to Reinforcement Learning for SYSU graduate students
 #### homework3
 + Multi-Agent DRL algorithms for [Multi-Agent Particle Environments (MPE)](https://github.com/openai/multiagent-particle-envs) (simple_spread), including VDN, QMIX and MATD3.
 
-py3.7 is required for homework2.
+Py3.7 is required for homework2.

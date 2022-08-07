@@ -1,0 +1,189 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>强化学习原理与应用作业一</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__html"><p></p><div class="toc"><h3>目录</h3><ul><ul><ul><li><a href="#Task_1_Frozen_Lake_MDP_1">Task 1 Frozen Lake MDP</a></li><ul><li><a href="#Policy_Iteration_2">Policy Iteration</a></li><li><a href="#Value_Iteration_50">Value Iteration</a></li></ul><li><a href="#Task_2_Test_Environment_81">Task 2 Test Environment</a></li><li><a href="#Task_3_Tabular_QLearning_86">Task 3 Tabular Q-Learning</a></li><li><a href="#Task_4_Maze_Example_106">Task 4 Maze Example</a></li><ul><li><a href="#1__109">1. 观测值说明</a></li><li><a href="#2__113">2. 动作空间说明</a></li><li><a href="#3_Q_Learning_115">3. Q Learning实验</a></li><li><a href="#4_SARSA_166">4. SARSA实验</a></li></ul></ul></ul></ul></div><p></p>
+<h3><a id="Task_1_Frozen_Lake_MDP_1"></a>Task 1 Frozen Lake MDP</h3>
+<h4><a id="Policy_Iteration_2"></a>Policy Iteration</h4>
+<ol>
+<li>
+<p>Policy Evaluation<br>
+固定当前策略π，更新状态价值函数V直至收敛。</p>
+<pre><code class="prism language-python"><span class="token comment"># 反复迭代直至收敛</span>
+<span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
+	value_function_next <span class="token operator">=</span> np<span class="token punctuation">.</span>zeros_like<span class="token punctuation">(</span>value_function<span class="token punctuation">)</span>
+	<span class="token keyword">for</span> s <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>nS<span class="token punctuation">)</span><span class="token punctuation">:</span>  <span class="token comment"># 一轮迭代</span>
+		a <span class="token operator">=</span> policy<span class="token punctuation">[</span>s<span class="token punctuation">]</span>
+		prob<span class="token punctuation">,</span> nextstate<span class="token punctuation">,</span> reward<span class="token punctuation">,</span> done <span class="token operator">=</span> P<span class="token punctuation">[</span>s<span class="token punctuation">]</span><span class="token punctuation">[</span>a<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>  <span class="token comment"># 此prob为π(s,a,s')，而不是π(s,a)</span>
+		value_function_next<span class="token punctuation">[</span>s<span class="token punctuation">]</span> <span class="token operator">=</span> prob <span class="token operator">*</span> <span class="token punctuation">(</span>reward <span class="token operator">+</span> gamma<span class="token operator">*</span>value_function<span class="token punctuation">[</span>nextstate<span class="token punctuation">]</span><span class="token punctuation">)</span>
+	<span class="token keyword">if</span> np<span class="token punctuation">.</span><span class="token builtin">max</span><span class="token punctuation">(</span>np<span class="token punctuation">.</span><span class="token builtin">abs</span><span class="token punctuation">(</span>value_function_next <span class="token operator">-</span> value_function<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> tol<span class="token punctuation">:</span>
+		<span class="token keyword">break</span>
+	value_function <span class="token operator">=</span> value_function_next
+</code></pre>
+</li>
+<br>
+<div STYLE="page-break-after: always;"></div>
+<li>
+<p>Policy Improvement<br>
+贪心选取使q(s, a)最大的a作为s的策略动作。</p>
+<pre><code class="prism language-python"><span class="token comment"># 确定性动作</span>
+<span class="token keyword">for</span> s <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>nS<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	q <span class="token operator">=</span> np<span class="token punctuation">.</span>zeros<span class="token punctuation">(</span>nA<span class="token punctuation">)</span>
+	<span class="token keyword">for</span> a <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>nA<span class="token punctuation">)</span><span class="token punctuation">:</span>
+		prob<span class="token punctuation">,</span> nextstate<span class="token punctuation">,</span> reward<span class="token punctuation">,</span> done <span class="token operator">=</span> P<span class="token punctuation">[</span>s<span class="token punctuation">]</span><span class="token punctuation">[</span>a<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>  <span class="token comment"># 此prob为π(s,a,s')，而不是π(s,a)</span>
+		q<span class="token punctuation">[</span>a<span class="token punctuation">]</span> <span class="token operator">=</span> prob <span class="token operator">*</span> <span class="token punctuation">(</span>reward <span class="token operator">+</span> gamma <span class="token operator">*</span> value_from_policy<span class="token punctuation">[</span>nextstate<span class="token punctuation">]</span><span class="token punctuation">)</span>
+	new_policy<span class="token punctuation">[</span>s<span class="token punctuation">]</span> <span class="token operator">=</span> np<span class="token punctuation">.</span>argmax<span class="token punctuation">(</span>q<span class="token punctuation">)</span>
+</code></pre>
+</li>
+<li>
+<p>重复策略评估和策略改进，直至策略收敛</p>
+<pre><code class="prism language-python"><span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
+	value_function <span class="token operator">=</span> policy_evaluation<span class="token punctuation">(</span>P<span class="token punctuation">,</span> nS<span class="token punctuation">,</span> nA<span class="token punctuation">,</span> policy<span class="token punctuation">,</span> gamma<span class="token punctuation">,</span> tol<span class="token punctuation">)</span>
+	new_policy <span class="token operator">=</span> policy_improvement<span class="token punctuation">(</span>P<span class="token punctuation">,</span> nS<span class="token punctuation">,</span> nA<span class="token punctuation">,</span> value_function<span class="token punctuation">,</span> <span class="token boolean">None</span><span class="token punctuation">,</span> gamma<span class="token punctuation">)</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span>new_policy <span class="token operator">==</span> policy<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token builtin">all</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+		<span class="token keyword">break</span>
+	<span class="token keyword">else</span><span class="token punctuation">:</span>
+		policy <span class="token operator">=</span> new_policy
+</code></pre>
+</li>
+<li>
+<p>最终的V值和策略分别如下图：<br>
+<img src="https://img-blog.csdnimg.cn/bf905d1751b14240a3c1384e97a478a3.png" alt="在这里插入图片描述"><br>
+<img src="https://img-blog.csdnimg.cn/32504e2a96224f2f879b2c98958423af.png" alt="在这里插入图片描述"><br>
+<img src="https://img-blog.csdnimg.cn/25280e23d7d14c499c245884eb6c2333.png" alt="在这里插入图片描述"></p>
+</li>
+</ol>
+<hr>
+<br>
+<div STYLE="page-break-after: always;"></div>
+<h4><a id="Value_Iteration_50"></a>Value Iteration</h4>
+<p>迭代更新最优值函数直至收敛，并执行一次策略提取。</p>
+<pre><code class="prism language-python"><span class="token keyword">while</span> <span class="token boolean">True</span><span class="token punctuation">:</span>
+	value_function_next <span class="token operator">=</span> np<span class="token punctuation">.</span>zeros_like<span class="token punctuation">(</span>value_function<span class="token punctuation">)</span>
+	<span class="token keyword">for</span> s <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>nS<span class="token punctuation">)</span><span class="token punctuation">:</span>
+		q <span class="token operator">=</span> np<span class="token punctuation">.</span>zeros<span class="token punctuation">(</span>nA<span class="token punctuation">)</span>
+		<span class="token keyword">for</span> a <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>nA<span class="token punctuation">)</span><span class="token punctuation">:</span>
+			prob<span class="token punctuation">,</span> nextstate<span class="token punctuation">,</span> reward<span class="token punctuation">,</span> done <span class="token operator">=</span> P<span class="token punctuation">[</span>s<span class="token punctuation">]</span><span class="token punctuation">[</span>a<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>  <span class="token comment"># 此prob为π(s,a,s')，而不是π(s,a)</span>
+			q<span class="token punctuation">[</span>a<span class="token punctuation">]</span> <span class="token operator">=</span> prob <span class="token operator">*</span> <span class="token punctuation">(</span>reward <span class="token operator">+</span> gamma <span class="token operator">*</span> value_function<span class="token punctuation">[</span>nextstate<span class="token punctuation">]</span><span class="token punctuation">)</span>
+			value_function_next<span class="token punctuation">[</span>s<span class="token punctuation">]</span> <span class="token operator">=</span> np<span class="token punctuation">.</span><span class="token builtin">max</span><span class="token punctuation">(</span>q<span class="token punctuation">)</span>
+	<span class="token keyword">if</span> np<span class="token punctuation">.</span><span class="token builtin">max</span><span class="token punctuation">(</span>np<span class="token punctuation">.</span><span class="token builtin">abs</span><span class="token punctuation">(</span>value_function_next <span class="token operator">-</span> value_function<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> tol<span class="token punctuation">:</span>
+		<span class="token keyword">break</span>
+	value_function <span class="token operator">=</span> value_function_next
+	
+<span class="token comment"># 一次策略提取</span>
+<span class="token keyword">for</span> s <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>nS<span class="token punctuation">)</span><span class="token punctuation">:</span>
+	q <span class="token operator">=</span> np<span class="token punctuation">.</span>zeros<span class="token punctuation">(</span>nA<span class="token punctuation">)</span>
+	<span class="token keyword">for</span> a <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>nA<span class="token punctuation">)</span><span class="token punctuation">:</span>
+		prob<span class="token punctuation">,</span> nextstate<span class="token punctuation">,</span> reward<span class="token punctuation">,</span> done <span class="token operator">=</span> P<span class="token punctuation">[</span>s<span class="token punctuation">]</span><span class="token punctuation">[</span>a<span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>  <span class="token comment"># 此prob为π(s,a,s')，而不是π(s,a)</span>
+		q<span class="token punctuation">[</span>a<span class="token punctuation">]</span> <span class="token operator">=</span> prob <span class="token operator">*</span> <span class="token punctuation">(</span>reward <span class="token operator">+</span> gamma <span class="token operator">*</span> value_function<span class="token punctuation">[</span>nextstate<span class="token punctuation">]</span><span class="token punctuation">)</span>
+	policy<span class="token punctuation">[</span>s<span class="token punctuation">]</span> <span class="token operator">=</span> np<span class="token punctuation">.</span>argmax<span class="token punctuation">(</span>q<span class="token punctuation">)</span>
+</code></pre>
+<p>V值和策略P与策略迭代方法相同。<br>
+<img src="https://img-blog.csdnimg.cn/7aa98ef24d004e6b8363b0ee7bc56262.png" alt="在这里插入图片描述"></p>
+<hr>
+<div></div>
+<div STYLE="page-break-after: always;"></div>
+<h3><a id="Task_2_Test_Environment_81"></a>Task 2 Test Environment</h3>
+<p>使用动态规划DP自底向上求解，如下图，因为DP是精确算法，所以求解的是最优解。<br>
+<img src="https://img-blog.csdnimg.cn/73a005b02bbf4d2ebde8a3f174f1ac92.png?x-oss-process=image,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBARWNob-acqA==,size_20,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+<hr>
+
+<br>
+<div STYLE="page-break-after: always;"></div>
+<h3><a id="Task_3_Tabular_QLearning_86"></a>Task 3 Tabular Q-Learning</h3>
+<p>agent探索概率epsilon线性递减</p>
+<pre><code class="prism language-python"><span class="token keyword">assert</span> self<span class="token punctuation">.</span>nsteps <span class="token operator">&gt;=</span> <span class="token number">1</span>
+k <span class="token operator">=</span> <span class="token punctuation">(</span>self<span class="token punctuation">.</span>eps_end <span class="token operator">-</span> self<span class="token punctuation">.</span>eps_begin<span class="token punctuation">)</span> <span class="token operator">/</span> <span class="token punctuation">(</span>self<span class="token punctuation">.</span>nsteps <span class="token operator">-</span> <span class="token number">0</span><span class="token punctuation">)</span>
+<span class="token keyword">if</span> t <span class="token operator">&lt;=</span> self<span class="token punctuation">.</span>nsteps<span class="token punctuation">:</span>
+    self<span class="token punctuation">.</span>epsilon <span class="token operator">=</span> self<span class="token punctuation">.</span>eps_begin <span class="token operator">+</span> k <span class="token operator">*</span> <span class="token punctuation">(</span>t <span class="token operator">-</span> <span class="token number">0</span><span class="token punctuation">)</span>
+<span class="token keyword">else</span><span class="token punctuation">:</span>
+    self<span class="token punctuation">.</span>epsilon <span class="token operator">=</span>  self<span class="token punctuation">.</span>eps_end
+</code></pre>
+<p><span class="katex--inline"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ϵ</mi><mo>−</mo><mi mathvariant="bold">g</mi><mi mathvariant="bold">r</mi><mi mathvariant="bold">e</mi><mi mathvariant="bold">e</mi><mi mathvariant="bold">d</mi><mi mathvariant="bold">y</mi></mrow><annotation encoding="application/x-tex">\mathbf{\epsilon-greedy}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.88888em; vertical-align: -0.19444em;"></span><span class="mord"><span class="mord mathdefault">ϵ</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mord mathbf" style="margin-right: 0.01597em;">g</span><span class="mord mathbf">r</span><span class="mord mathbf">e</span><span class="mord mathbf">e</span><span class="mord mathbf">d</span><span class="mord mathbf" style="margin-right: 0.01597em;">y</span></span></span></span></span></span> Exploration Strategy</p>
+<pre><code class="prism language-python"><span class="token keyword">if</span> np<span class="token punctuation">.</span>random<span class="token punctuation">.</span>rand<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;=</span> self<span class="token punctuation">.</span>epsilon<span class="token punctuation">:</span>
+    <span class="token keyword">return</span> self<span class="token punctuation">.</span>env<span class="token punctuation">.</span>action_space<span class="token punctuation">.</span>sample<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">else</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> best_action
+</code></pre>
+<hr>
+<h3><a id="Task_4_Maze_Example_106"></a>Task 4 Maze Example</h3>
+<p>实现Q Learning和SARSA算法，两个算法很类似，只不过SARSA是on policy，其用于产生训练数据的决策策略和更新Q表的优化策略相同，都是<span class="katex--inline"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ϵ</mi><mo>−</mo><mi mathvariant="bold">g</mi><mi mathvariant="bold">r</mi><mi mathvariant="bold">e</mi><mi mathvariant="bold">e</mi><mi mathvariant="bold">d</mi><mi mathvariant="bold">y</mi></mrow><annotation encoding="application/x-tex">\mathbf{\epsilon-greedy}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.88888em; vertical-align: -0.19444em;"></span><span class="mord"><span class="mord mathdefault">ϵ</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mord mathbf" style="margin-right: 0.01597em;">g</span><span class="mord mathbf">r</span><span class="mord mathbf">e</span><span class="mord mathbf">e</span><span class="mord mathbf">d</span><span class="mord mathbf" style="margin-right: 0.01597em;">y</span></span></span></span></span></span>，Q Learning是off policy，其决策策略使用<span class="katex--inline"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ϵ</mi><mo>−</mo><mi mathvariant="bold">g</mi><mi mathvariant="bold">r</mi><mi mathvariant="bold">e</mi><mi mathvariant="bold">e</mi><mi mathvariant="bold">d</mi><mi mathvariant="bold">y</mi></mrow><annotation encoding="application/x-tex">\mathbf{\epsilon-greedy}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.88888em; vertical-align: -0.19444em;"></span><span class="mord"><span class="mord mathdefault">ϵ</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mord mathbf" style="margin-right: 0.01597em;">g</span><span class="mord mathbf">r</span><span class="mord mathbf">e</span><span class="mord mathbf">e</span><span class="mord mathbf">d</span><span class="mord mathbf" style="margin-right: 0.01597em;">y</span></span></span></span></span></span>，优化策略使用贪心策略。</p>
+<h4><a id="1__109"></a>1. 观测值说明</h4>
+<p>agent的观测值(x1, y1, x2, y2)，(x1, y1)为agent所处的左上角坐标，(x2, y2)为agent的右下角坐标。将16个左上角坐标映射为0-15，作为状态，也即Q表的行索引，已标记在下图中。坐标系即状态空间如下图所示。由左上角左边换算为Q标行索引的公式为<br><code>index = (x1-5)//40 + (y1-5)//40 * 4</code><br>
+<img src="https://img-blog.csdnimg.cn/78210a75634e441e857ad57f48742b61.png#pic_center" alt="在这里插入图片描述"></p>
+<h4><a id="2__113"></a>2. 动作空间说明</h4>
+<p>由environment的实现逻辑，在4x4的网格内，0：向上移动一格，1：向下移动一格，2：向右移动一格，3：向左移动一格；当执行动作会超出边界时，则保存在原位置不动。</p>
+<h4><a id="3_Q_Learning_115"></a>3. Q Learning实验</h4>
+<p>部分核心代码如下：<br>
+初始化Q表</p>
+<pre><code class="prism language-python">np<span class="token punctuation">.</span>random<span class="token punctuation">.</span>seed<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+obs_dim <span class="token operator">=</span> <span class="token number">4</span> <span class="token operator">*</span> <span class="token number">4</span>  <span class="token comment"># 观测空间为16</span>
+self<span class="token punctuation">.</span>q <span class="token operator">=</span> np<span class="token punctuation">.</span>random<span class="token punctuation">.</span>rand<span class="token punctuation">(</span>obs_dim<span class="token punctuation">,</span> <span class="token builtin">len</span><span class="token punctuation">(</span>actions<span class="token punctuation">)</span><span class="token punctuation">)</span>
+</code></pre>
+<p>选择动作</p>
+<pre><code class="prism language-python"><span class="token comment"># epsilon 贪心</span>
+<span class="token keyword">if</span> np<span class="token punctuation">.</span>random<span class="token punctuation">.</span>rand<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> self<span class="token punctuation">.</span>epsilon<span class="token punctuation">:</span>
+    action <span class="token operator">=</span> np<span class="token punctuation">.</span>random<span class="token punctuation">.</span>choice<span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>actions<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">else</span><span class="token punctuation">:</span>
+    <span class="token comment"># 由观测坐标换算为状态序号，agent左上角坐标为(x=observation[0], y=observation[1])</span>
+    <span class="token comment"># 换算公式为index = (x-5)//40 + (y-5)//40 * 4</span>
+    x<span class="token punctuation">,</span> y <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>observation<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token builtin">int</span><span class="token punctuation">(</span>observation<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span>  <span class="token comment"># 提取observation的左上角坐标</span>
+    s_idx <span class="token operator">=</span> <span class="token punctuation">(</span>x<span class="token operator">-</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token operator">//</span><span class="token number">40</span> <span class="token operator">+</span> <span class="token punctuation">(</span>y<span class="token operator">-</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token operator">//</span><span class="token number">40</span> <span class="token operator">*</span> <span class="token number">4</span>              <span class="token comment"># 换算为Q表的行下标</span>
+    action <span class="token operator">=</span> np<span class="token punctuation">.</span>argmax<span class="token punctuation">(</span>self<span class="token punctuation">.</span>q<span class="token punctuation">[</span>s_idx<span class="token punctuation">,</span> <span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+<span class="token keyword">return</span> action
+</code></pre>
+<br>
+<div STYLE="page-break-after: always;"></div>
+<p>更新Q表</p>
+<pre><code class="prism language-python">x<span class="token punctuation">,</span> y <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>s<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token builtin">int</span><span class="token punctuation">(</span>s<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span>  <span class="token comment"># 提取s的左上角坐标</span>
+idx_s <span class="token operator">=</span> <span class="token punctuation">(</span>x <span class="token operator">-</span> <span class="token number">5</span><span class="token punctuation">)</span> <span class="token operator">//</span> <span class="token number">40</span> <span class="token operator">+</span> <span class="token punctuation">(</span>y <span class="token operator">-</span> <span class="token number">5</span><span class="token punctuation">)</span> <span class="token operator">//</span> <span class="token number">40</span> <span class="token operator">*</span> <span class="token number">4</span>  <span class="token comment"># 换算为Q表的行下标</span>
+<span class="token keyword">if</span> self<span class="token punctuation">.</span>check_state_exist<span class="token punctuation">(</span>s_<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    td_target <span class="token operator">=</span> r <span class="token operator">+</span> self<span class="token punctuation">.</span>gamma <span class="token operator">*</span> <span class="token number">0</span>  <span class="token comment"># 终止状态的Q值为0</span>
+<span class="token keyword">else</span><span class="token punctuation">:</span>
+    x_<span class="token punctuation">,</span> y_ <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>s_<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token builtin">int</span><span class="token punctuation">(</span>s_<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span>  <span class="token comment"># 提取s_的左上角坐标</span>
+    idx_s_ <span class="token operator">=</span> <span class="token punctuation">(</span>x_ <span class="token operator">-</span> <span class="token number">5</span><span class="token punctuation">)</span> <span class="token operator">//</span> <span class="token number">40</span> <span class="token operator">+</span> <span class="token punctuation">(</span>y_ <span class="token operator">-</span> <span class="token number">5</span><span class="token punctuation">)</span> <span class="token operator">//</span> <span class="token number">40</span> <span class="token operator">*</span> <span class="token number">4</span>  <span class="token comment"># 换算为Q表的行下标</span>
+    td_target <span class="token operator">=</span> r <span class="token operator">+</span> self<span class="token punctuation">.</span>gamma <span class="token operator">*</span> np<span class="token punctuation">.</span><span class="token builtin">max</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>q<span class="token punctuation">[</span>idx_s_<span class="token punctuation">,</span> <span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+self<span class="token punctuation">.</span>q<span class="token punctuation">[</span>idx_s<span class="token punctuation">,</span> a<span class="token punctuation">]</span> <span class="token operator">=</span> self<span class="token punctuation">.</span>q<span class="token punctuation">[</span>idx_s<span class="token punctuation">,</span> a<span class="token punctuation">]</span> <span class="token operator">+</span> self<span class="token punctuation">.</span>lr <span class="token operator">*</span> <span class="token punctuation">(</span>td_target <span class="token operator">-</span> self<span class="token punctuation">.</span>q<span class="token punctuation">[</span>idx_s<span class="token punctuation">,</span> a<span class="token punctuation">]</span><span class="token punctuation">)</span>
+</code></pre>
+<p>判断终止状态</p>
+<pre><code class="prism language-python"><span class="token keyword">if</span> state <span class="token operator">==</span> <span class="token string">'terminal'</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> <span class="token boolean">True</span>
+<span class="token keyword">else</span><span class="token punctuation">:</span>
+    <span class="token keyword">return</span> <span class="token boolean">False</span>
+</code></pre>
+<p><span class="katex--inline"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ϵ</mi></mrow><annotation encoding="application/x-tex">\mathbf{\epsilon}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.43056em; vertical-align: 0em;"></span><span class="mord"><span class="mord mathdefault">ϵ</span></span></span></span></span></span>设为0.2，训练500个episodes，Q表如下，结合上图的坐标系、状态空间和动作空间，可以发现已经学习到策略：在状态5，Q(5,1)和Q(5,2)很小，能避免黑块；而在黄色奖励附近，Q(11,3)和Q(14,0)很大，能够到达奖励。可视化实验也显示agent总是能较快到达奖励位置。<br>
+<img src="https://img-blog.csdnimg.cn/f5a67ec7e7514cbc9ba1c9c7d047fc3c.png?x-oss-process=image,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBARWNob-acqA==,size_14,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"><br>
+训练1000个episodes后的Q表<br>
+<img src="https://img-blog.csdnimg.cn/c86128b4bb714a90aa22bccbf587ab29.png?x-oss-process=image,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBARWNob-acqA==,size_13,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+<h4><a id="4_SARSA_166"></a>4. SARSA实验</h4>
+<p>SARSA与Q Learning类似，只是SARSA更新Q表的优化策略仍是<span class="katex--inline"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ϵ</mi><mo>−</mo><mi mathvariant="bold">g</mi><mi mathvariant="bold">r</mi><mi mathvariant="bold">e</mi><mi mathvariant="bold">e</mi><mi mathvariant="bold">d</mi><mi mathvariant="bold">y</mi></mrow><annotation encoding="application/x-tex">\mathbf{\epsilon-greedy}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.88888em; vertical-align: -0.19444em;"></span><span class="mord"><span class="mord mathdefault">ϵ</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mord mathbf" style="margin-right: 0.01597em;">g</span><span class="mord mathbf">r</span><span class="mord mathbf">e</span><span class="mord mathbf">e</span><span class="mord mathbf">d</span><span class="mord mathbf" style="margin-right: 0.01597em;">y</span></span></span></span></span></span>，为on policy算法。<br>
+与Q Learning的区别部分如下：</p>
+<pre><code class="prism language-python">x<span class="token punctuation">,</span> y <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>s<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token builtin">int</span><span class="token punctuation">(</span>s<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span>  <span class="token comment"># 提取s的左上角坐标</span>
+idx_s <span class="token operator">=</span> <span class="token punctuation">(</span>x <span class="token operator">-</span> <span class="token number">5</span><span class="token punctuation">)</span> <span class="token operator">//</span> <span class="token number">40</span> <span class="token operator">+</span> <span class="token punctuation">(</span>y <span class="token operator">-</span> <span class="token number">5</span><span class="token punctuation">)</span> <span class="token operator">//</span> <span class="token number">40</span> <span class="token operator">*</span> <span class="token number">4</span>  <span class="token comment"># 换算为Q表的行下标</span>
+<span class="token keyword">if</span> self<span class="token punctuation">.</span>check_state_exist<span class="token punctuation">(</span>s_<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    td_target <span class="token operator">=</span> r <span class="token operator">+</span> self<span class="token punctuation">.</span>gamma <span class="token operator">*</span> <span class="token number">0</span>  <span class="token comment"># 终止状态的Q值为0</span>
+<span class="token keyword">else</span><span class="token punctuation">:</span>
+    x_<span class="token punctuation">,</span> y_ <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>s_<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token builtin">int</span><span class="token punctuation">(</span>s_<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span>  <span class="token comment"># 提取s_的左上角坐标</span>
+    idx_s_ <span class="token operator">=</span> <span class="token punctuation">(</span>x_ <span class="token operator">-</span> <span class="token number">5</span><span class="token punctuation">)</span> <span class="token operator">//</span> <span class="token number">40</span> <span class="token operator">+</span> <span class="token punctuation">(</span>y_ <span class="token operator">-</span> <span class="token number">5</span><span class="token punctuation">)</span> <span class="token operator">//</span> <span class="token number">40</span> <span class="token operator">*</span> <span class="token number">4</span>  <span class="token comment"># 换算为Q表的行下标</span>
+    <span class="token keyword">if</span> np<span class="token punctuation">.</span>random<span class="token punctuation">.</span>rand<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&lt;</span> self<span class="token punctuation">.</span>epsilon<span class="token punctuation">:</span>
+        action <span class="token operator">=</span> np<span class="token punctuation">.</span>random<span class="token punctuation">.</span>choice<span class="token punctuation">(</span><span class="token builtin">len</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>actions<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        td_target <span class="token operator">=</span> r <span class="token operator">+</span> self<span class="token punctuation">.</span>gamma <span class="token operator">*</span> <span class="token punctuation">(</span>self<span class="token punctuation">.</span>q<span class="token punctuation">[</span>idx_s_<span class="token punctuation">,</span> action<span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        td_target <span class="token operator">=</span> r <span class="token operator">+</span> self<span class="token punctuation">.</span>gamma <span class="token operator">*</span> np<span class="token punctuation">.</span><span class="token builtin">max</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>q<span class="token punctuation">[</span>idx_s_<span class="token punctuation">,</span> <span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+self<span class="token punctuation">.</span>q<span class="token punctuation">[</span>idx_s<span class="token punctuation">,</span> a<span class="token punctuation">]</span> <span class="token operator">=</span> self<span class="token punctuation">.</span>q<span class="token punctuation">[</span>idx_s<span class="token punctuation">,</span> a<span class="token punctuation">]</span> <span class="token operator">+</span> self<span class="token punctuation">.</span>lr <span class="token operator">*</span> <span class="token punctuation">(</span>td_target <span class="token operator">-</span> self<span class="token punctuation">.</span>q<span class="token punctuation">[</span>idx_s<span class="token punctuation">,</span> a<span class="token punctuation">]</span><span class="token punctuation">)</span>
+</code></pre>
+<p><span class="katex--inline"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ϵ</mi></mrow><annotation encoding="application/x-tex">\mathbf{\epsilon}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.43056em; vertical-align: 0em;"></span><span class="mord"><span class="mord mathdefault">ϵ</span></span></span></span></span></span>仍设为0.2，500个episodes后的Q表如下，实验显示agent已经学到较快到达奖励的策略。<br>
+<img src="https://img-blog.csdnimg.cn/777bd2b31ba843c189e28a5f586397fd.png?x-oss-process=image,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBARWNob-acqA==,size_13,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"><br>
+训练1000个episodes后的Q表如下。<br>
+<img src="https://img-blog.csdnimg.cn/d9123b9c8fa74daa88954cdbb76bd6ed.png?x-oss-process=image,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBARWNob-acqA==,size_14,color_FFFFFF,t_70,g_se,x_16#pic_center" alt="在这里插入图片描述"></p>
+</div>
+</body>
+
+</html>

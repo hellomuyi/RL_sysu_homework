@@ -1,0 +1,177 @@
+Training...
+episode: 0  return: -113.33   mean: -113.33  time: 0.44s
+episode: 10  return: -800.45   mean: -376.21  time: 7.48s
+episode: 20  return: -108.66   mean: -284.42  time: 76.33s
+episode: 30  return: -316.84   mean: -246.93  time: 53.58s
+episode: 40  return: -167.72   mean: -230.52  time: 27.35s
+episode: 50  return: -105.90   mean: -205.22  time: 89.86s
+episode: 60  return: -92.76   mean: -190.79  time: 94.41s
+episode: 70  return: -100.12   mean: -178.55  time: 102.86s
+episode: 80  return: -130.23   mean: -168.21  time: 98.82s
+episode: 90  return: -134.06   mean: -160.88  time: 104.40s
+episode: 100  return: -47.24   mean: -158.65  time: 99.50s
+episode: 110  return: -64.72   mean: -125.62  time: 116.46s
+episode: 120  return: -74.80   mean: -114.80  time: 118.22s
+episode: 130  return: -42.00   mean: -104.03  time: 107.63s
+episode: 140  return: -57.41   mean: -92.37  time: 114.65s
+episode: 150  return: -65.90   mean: -88.03  time: 117.81s
+episode: 160  return: -146.63   mean: -85.79  time: 95.21s
+episode: 170  return: -88.01   mean: -81.13  time: 121.24s
+episode: 180  return: -56.42   mean: -78.68  time: 109.00s
+episode: 190  return: -46.65   mean: -75.50  time: 118.01s
+episode: 200  return: -42.28   mean: -69.56  time: 115.41s
+episode: 210  return: -84.92   mean: -70.52  time: 109.91s
+episode: 220  return: -78.69   mean: -71.08  time: 108.56s
+episode: 230  return: -58.13   mean: -73.36  time: 110.80s
+episode: 240  return: -78.91   mean: -73.83  time: 111.35s
+episode: 250  return: -75.27   mean: -74.42  time: 109.98s
+episode: 260  return: -106.39   mean: -71.83  time: 107.52s
+episode: 270  return: -49.80   mean: -73.36  time: 109.15s
+episode: 280  return: -84.03   mean: -73.49  time: 112.10s
+episode: 290  return: -27.87   mean: -75.35  time: 111.05s
+episode: 300  return: -82.50   mean: -72.45  time: 112.33s
+episode: 310  return: -94.64   mean: -70.00  time: 110.65s
+episode: 320  return: -75.29   mean: -68.33  time: 112.60s
+episode: 330  return: -42.89   mean: -67.04  time: 113.71s
+episode: 340  return: -43.82   mean: -67.27  time: 109.97s
+episode: 350  return: -78.11   mean: -68.33  time: 108.47s
+episode: 360  return: -70.73   mean: -66.19  time: 113.80s
+episode: 370  return: -63.12   mean: -64.21  time: 112.06s
+episode: 380  return: -33.82   mean: -61.81  time: 113.88s
+episode: 390  return: -50.98   mean: -57.30  time: 113.78s
+episode: 400  return: -21.80   mean: -57.88  time: 112.06s
+episode: 410  return: -30.55   mean: -57.80  time: 115.19s
+episode: 420  return: -89.27   mean: -58.02  time: 110.46s
+episode: 430  return: -88.16   mean: -56.26  time: 112.69s
+episode: 440  return: -56.28   mean: -53.37  time: 114.06s
+episode: 450  return: -73.51   mean: -51.77  time: 114.72s
+episode: 460  return: -37.06   mean: -51.65  time: 115.49s
+episode: 470  return: -25.00   mean: -50.15  time: 112.41s
+episode: 480  return: -49.16   mean: -49.77  time: 114.57s
+episode: 490  return: -47.72   mean: -50.88  time: 111.11s
+episode: 500  return: -51.43   mean: -51.92  time: 115.50s
+episode: 510  return: -103.68   mean: -51.88  time: 117.86s
+episode: 520  return: -88.13   mean: -51.07  time: 110.96s
+episode: 530  return: -86.87   mean: -50.12  time: 114.06s
+episode: 540  return: -34.08   mean: -50.97  time: 113.95s
+episode: 550  return: -43.65   mean: -50.10  time: 122.83s
+episode: 560  return: -26.12   mean: -49.14  time: 113.07s
+episode: 570  return: -50.92   mean: -50.11  time: 122.15s
+episode: 580  return: -75.70   mean: -51.32  time: 115.43s
+episode: 590  return: -34.89   mean: -49.74  time: 113.16s
+episode: 600  return: -0.37   mean: -47.76  time: 118.04s
+episode: 610  return: -56.52   mean: -47.88  time: 115.02s
+episode: 620  return: -40.66   mean: -46.74  time: 116.49s
+episode: 630  return: 166.19   mean: -38.93  time: 104.37s
+episode: 640  return: 141.82   mean: -20.34  time: 82.33s
+episode: 650  return: 112.41   mean: 0.99  time: 54.58s
+episode: 660  return: 4.61   mean: 21.06  time: 54.59s
+episode: 670  return: 180.63   mean: 38.81  time: 66.84s
+episode: 680  return: -2.26   mean: 54.32  time: 81.66s
+episode: 690  return: -111.82   mean: 69.24  time: 62.87s
+episode: 700  return: 197.82   mean: 90.38  time: 51.27s
+episode: 710  return: 175.30   mean: 114.82  time: 46.57s
+episode: 720  return: 135.87   mean: 132.14  time: 77.19s
+episode: 730  return: 101.48   mean: 136.13  time: 66.25s
+episode: 740  return: -85.51   mean: 128.09  time: 80.18s
+episode: 750  return: -8.16   mean: 108.24  time: 106.88s
+episode: 760  return: -18.63   mean: 104.70  time: 70.93s
+episode: 770  return: 191.39   mean: 106.26  time: 54.34s
+episode: 780  return: 177.96   mean: 113.74  time: 68.77s
+episode: 790  return: 197.94   mean: 121.26  time: 55.32s
+episode: 800  return: 150.59   mean: 120.47  time: 64.60s
+episode: 810  return: 206.25   mean: 119.68  time: 61.28s
+episode: 820  return: 168.02   mean: 126.73  time: 46.49s
+episode: 830  return: 35.69   mean: 135.89  time: 60.18s
+episode: 840  return: 218.98   mean: 149.96  time: 42.12s
+episode: 850  return: 219.19   mean: 173.50  time: 39.55s
+episode: 860  return: 225.06   mean: 180.75  time: 35.79s
+episode: 870  return: -55.37   mean: 180.07  time: 37.95s
+episode: 880  return: 147.34   mean: 178.50  time: 35.19s
+episode: 890  return: 189.50   mean: 179.83  time: 33.66s
+episode: 900  return: 161.26   mean: 181.57  time: 38.34s
+episode: 910  return: 133.91   mean: 182.61  time: 49.61s
+episode: 920  return: 243.62   mean: 182.89  time: 33.46s
+episode: 930  return: 235.50   mean: 185.06  time: 42.60s
+episode: 940  return: 212.68   mean: 184.97  time: 40.06s
+episode: 950  return: 177.16   mean: 182.68  time: 40.49s
+episode: 960  return: 152.89   mean: 180.75  time: 50.56s
+episode: 970  return: 168.93   mean: 186.90  time: 35.66s
+episode: 980  return: 224.84   mean: 191.90  time: 32.51s
+episode: 990  return: 209.69   mean: 194.08  time: 32.67s
+Time: 145.10m
+[33mWARN: gym.spaces.Box autodetected dtype as <class 'numpy.float32'>. Please provide explicit dtype.[0m
+[33mWARN: gym.spaces.Box autodetected dtype as <class 'numpy.float32'>. Please provide explicit dtype.[0m
+test:  1  reward: 234.17
+test:  2  reward: 198.46
+test:  3  reward: 195.21
+test:  4  reward: 194.36
+test:  5  reward: 219.83
+test:  6  reward: 222.41
+test:  7  reward: 199.14
+test:  8  reward: 186.11
+test:  9  reward: 202.88
+test: 10  reward: 180.96
+[33mWARN: gym.spaces.Box autodetected dtype as <class 'numpy.float32'>. Please provide explicit dtype.[0m
+[33mWARN: gym.spaces.Box autodetected dtype as <class 'numpy.float32'>. Please provide explicit dtype.[0m
+test:  1  reward: 188.13
+test:  2  reward: 202.88
+test:  3  reward: 203.33
+test:  4  reward: 164.02
+test:  5  reward: 203.82
+test:  6  reward: 202.20
+test:  7  reward: 220.58
+test:  8  reward: 201.67
+test:  9  reward: 224.50
+test: 10  reward: 225.59
+[33mWARN: gym.spaces.Box autodetected dtype as <class 'numpy.float32'>. Please provide explicit dtype.[0m
+[33mWARN: gym.spaces.Box autodetected dtype as <class 'numpy.float32'>. Please provide explicit dtype.[0m
+test:  1  reward: 258.77
+test:  2  reward: 210.17
+test:  3  reward: 221.72
+test:  4  reward: 223.09
+test:  5  reward: 179.50
+test:  6  reward: 248.67
+test:  7  reward: 183.44
+test:  8  reward: 211.91
+test:  9  reward: 214.03
+test: 10  reward: 253.13
+[33mWARN: gym.spaces.Box autodetected dtype as <class 'numpy.float32'>. Please provide explicit dtype.[0m
+[33mWARN: gym.spaces.Box autodetected dtype as <class 'numpy.float32'>. Please provide explicit dtype.[0m
+test:  1  reward: 170.09
+test:  2  reward: 237.69
+test:  3  reward: 267.11
+test:  4  reward: 246.62
+test:  5  reward: 216.75
+test:  6  reward: 216.77
+test:  7  reward: 262.12
+test:  8  reward: 208.40
+test:  9  reward: 232.00
+test: 10  reward: 216.72
+mean: 227.43
+[33mWARN: gym.spaces.Box autodetected dtype as <class 'numpy.float32'>. Please provide explicit dtype.[0m
+[33mWARN: gym.spaces.Box autodetected dtype as <class 'numpy.float32'>. Please provide explicit dtype.[0m
+test:  1  reward: 240.81
+test:  2  reward: 226.07
+test:  3  reward: 246.11
+test:  4  reward: 221.41
+test:  5  reward: 203.22
+test:  6  reward: 229.96
+test:  7  reward: 198.35
+test:  8  reward: 244.27
+test:  9  reward: 189.19
+test: 10  reward: 249.84
+mean: 224.92
+[33mWARN: gym.spaces.Box autodetected dtype as <class 'numpy.float32'>. Please provide explicit dtype.[0m
+[33mWARN: gym.spaces.Box autodetected dtype as <class 'numpy.float32'>. Please provide explicit dtype.[0m
+test:  1  reward: 240.81
+test:  2  reward: 226.07
+test:  3  reward: 246.11
+test:  4  reward: 221.41
+test:  5  reward: 203.22
+test:  6  reward: 229.96
+test:  7  reward: 198.35
+test:  8  reward: 244.27
+test:  9  reward: 189.19
+test: 10  reward: 249.84
+mean: 224.92
