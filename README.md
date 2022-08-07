@@ -15,3 +15,5 @@ Homework with respect to Reinforcement Learning for SYSU graduate students
 
 #### homework3
 + Multi-Agent DRL algorithms for [Multi-Agent Particle Environments (MPE)](https://github.com/openai/multiagent-particle-envs) (simple_spread), including VDN, QMIX and MATD3.
+
+py3.7 is required for homework2.
